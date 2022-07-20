@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en   ">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>OOMPA Class Prediction Packages</title>
+    <link href="https://oompa.r-forge.r-project.org/bianchi.css" rel="stylesheet" type="text/css" />
+  </head>
+<body>
+
+<!-- <img src="tuba3.gif" alt="OOMPA logo" width="262px"  height="156px" /> -->
+<div id="logobar">
+  <img src="https://oompa.r-forge.r-project.org/tuba2.gif" alt="OOMPA logo" height="262px" width="156px" />
+<br />
+<br />
+<a href="https://oompa.r-forge.r-project.org/index.html">OOMPA Overview</a>
+<br />
+</div>
+<div id="mainarea">
+<h1>OOMPA PROJECT</h1>
+<h2>Class Prediction</h2>
+The Class Prediicton
+<A HREF="https://r-forge.r-project.org/">R-Forge</A> project is one
+component of the broader OOMPA Project produced by the
+<A HREF = "https://gitlab.com/krcoombes/coombeslab">Coombes Lab</A>
+over the last decade. it consists of a set of packages to help select
+features and build models in order to predict binary outcomes from
+omics data sets.
+
+<h3>Support</h3>
+Support for all packages that are part of the OOMPA family uses a
+common set of discussion forums and bug trackers:
+<ul>
+<li><a href="https://r-forge.r-project.org/forum/forum.php?forum_id=4515&group_id=1746">
+    User Help Forum</a></li>
+<li><a href="https://r-forge.r-project.org/forum/forum.php?forum_id=4516&group_id=1746">
+    Developer Forum</a></li>
+<li><a href="https://r-forge.r-project.org/tracker/?atid=5395&group_id=1746&func=browse">
+    Feature Requests</a></li>
+<li><a href="https://r-forge.r-project.org/tracker/?atid=5394&group_id=1746&func=browse">
+    Bug Reports</a> </li>
+</ul>
+
+
+<h3>List of Packages</h3>
+<dl>
+<dt><A HREF="http://classpred.r-forge.r-project.org/packages/BimodalIndex.html">BimodalIndex</A></dt>
+  <dd>The Bimodality Index is a tool developed in a paper
+  by <A HREF="https://pubmed.ncbi.nlm.nih.gov/19718451/">Wang and
+  colleagues</A> to identify features with bimodal distributions. The
+  motivating idea is that bimodally expressed featuires are always
+  markers of <I>something</I>; hopefully, a collection of those somethings
+  will be related to the outcome to be predicted.  See also this paper
+  by <A HREF="https://pubmed.ncbi.nlm.nih.gov/23303507/">Tong and
+  colleagues</A> and the <A HREF="">SIBER</A> package for an extension
+  of this idea to RNA-Sequencing data. </dd>
+<dt><A HREF="http://classpred.r-forge.r-project.org/packages/Modeler.html">Modeler</A></dt>
+  <dd>The Modeler package provides classes and methods for training
+  and using binary prediction models. it implements a variety of methods
+  for filtering features (i.e., removing features that you are sure
+  won't help), feature selection, and model construction. These are
+  all provided with a common interface that allows you to use them in
+  other contexts such as cross validation.</dd>
+<dt><A HREF="http://classpred.r-forge.r-project.org/packages/CrossValidate.html">CrossValidate</A></dt>
+  <dd>The CrossVal;idate package provides classes and methods for
+  cross validation of class prediction models. These work
+  with <TT>Modeler</TT> objects, but can make sure that feature
+  filtering or feature selection  are included properly within the
+  cross-validation loop.</dd>
+<dt><A HREF="http://classpred.r-forge.r-project.org/packages/GenAlgo.html">GenAlgo</A></dt>
+  <dd>This package implements a genetic algorithms in a form that can
+  be used for feature selection.</dd>
+<dt><A HREF="http://classpred.r-forge.r-project.org/packages/ClassPrediction.html">ClassPrediction</A></dt>
+  <dd>The <TT>ClassPrediction</TT> package provides no new
+  functionality. The only thing it does is automatically load
+  the <TT>GenAlgo</TT> and <TT>CrosValidate</TT> packages for
+  concurrent usage.</dd>
+</dl>
+
+
+
+<BR />
+<BR />
+<!-- R-Forge Logo -->
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+<tr><td>
+<a href="http://r-forge.r-project.org/">
+ <img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" 
+      border="0" alt="R-Forge Logo" /> </a> </td> </tr>
+</table>
+
+</div> <!-- end mainarea div-->
+
+
+</body>
+</html>
