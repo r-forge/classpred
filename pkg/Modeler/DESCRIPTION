@@ -1,9 +1,11 @@
 Package: Modeler
-Version: 3.4.6
+Version: 3.4.7
 Date: 2025-01-08
 Title: Classes and Methods for Training and Using Binary Prediction Models
-Author: Kevin R. Coombes
-Maintainer: Kevin R. Coombes <krc@silicovore.com>
+Authors@R: person(given = c("Kevin", "R."),
+                  family = "Coombes",
+                  role = c("aut", "cre"),
+                  email = "krc@silicovore.com")
 Depends: R (>= 2.10), ClassDiscovery, ClassComparison, oompaBase
 Imports: methods, stats, class, rpart, TailRank, e1071, randomForest, nnet, neuralnet
 Suggests: Biobase
