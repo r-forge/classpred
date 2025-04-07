@@ -12,7 +12,7 @@ CrossValidate(model, data, status, frac, nLoop, prune=keepAll, verbose=TRUE)
 }
 \arguments{
   \item{model}{
-An element of the \code{\link{Modeler}} class.
+An element of the \code{\link[Modeler]{Modeler}} class.
 }
   \item{data}{
 A matrix containing the data to be used for cross-validation. As with
@@ -48,7 +48,7 @@ progress.
   cross-validation, you must first prepare a pair of functions (one for
   learning models from training data, and one for making predictions on
   test data). These functions, along with any required meta-parameters,
-  are used to create an object of the \code{\link{Modeler-class}}. That
+  are used to create an object of the \code{\link[Modeler]{Modeler-class}}. That
   object is then passed to the \code{\link{CrossValidate}} function along
   with the full training data set. The full data set is then repeatedly
   split into its own training and test sets; you can specify the
