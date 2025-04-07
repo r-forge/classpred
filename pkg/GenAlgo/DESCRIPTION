@@ -1,10 +1,10 @@
 Package: GenAlgo
-Version: 2.2.0
-Date: 2020-10-13
+Version: 2.2.1
+Date: 2025-04-07
 Title: Classes and Methods to Use Genetic Algorithms for Feature Selection
-Author: Kevin R. Coombes
-Maintainer: Kevin R. Coombes <krc@silicovore.com>
-Depends: R (>= 3.0)
+Authors@R: person(given = c("Kevin", "R."), family = "Coombes",
+                  role = c("aut", "cre"), email = "krc@silicovore.com")
+Depends: R (>= 4.4)
 Imports: methods, stats, MASS, oompaBase (>= 3.0.1), ClassDiscovery
 Suggests: Biobase, xtable
 Description: Defines classes and methods that can be used
