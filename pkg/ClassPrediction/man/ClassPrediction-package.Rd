@@ -23,8 +23,8 @@
   Kevin R. Coombes \email{kcoombes@mdanderson.org}
 }
 \seealso{
-  \code{\link{GenAlg-class}},
-  \code{\link{CrossValidate-class}}.
+  \code{\link[GenAlgo]{GenAlg-class}},
+  \code{\link[CrossValidate]{CrossValidate-class}}.
 }
 \keyword{package}
 
