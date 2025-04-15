@@ -1,6 +1,6 @@
 Package: Modeler
-Version: 3.4.8
-Date: 2025-04-07
+Version: 3.4.9
+Date: 2025-04-11
 Title: Classes and Methods for Training and Using Binary Prediction Models
 Authors@R: person(given = c("Kevin", "R."),
                   family = "Coombes",
