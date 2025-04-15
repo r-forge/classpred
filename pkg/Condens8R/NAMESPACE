@@ -1,0 +1,14 @@
+# Copyright (C) Kevin R. Coombes, 2025.
+
+###
+### NAMESPACE
+###
+
+import(methods)
+import(Modeler)
+importFrom("logicFS", "logic.bagging")
+importFrom("LogicReg", "logreg.anneal.control")
+importFrom("BimodalIndex", "bimodalIndex")
+
+export(learnConstant, predictConstant, makeLeaf)
+export(learnLogic, predictLogic, logicModeler)
