@@ -1,54 +1,33 @@
 # Copyright (C) Kevin R. Coombes, 2025.
 
+splitters <- new.env()
+registerSplitter <- function(tag, description, FUN) {
+  if (tag %in% names(splitters)) {
+    warning("Replacing an existing splitter, 'tag', described as:",
+            splitters[[tag]]$description)
+  }
+  assign(tag, value = list(description = description, action = FUN),
+         envir = splitters)
+  invisible(tag)
+}
+registerSplitter("hc", "(Agglomerative) Hierarchical Clustering",
+                 function(dmat) cutree(hclust(dmat, method = "ward.D2"), k = 2))
+registerSplitter("km", "K-Means Clustering",
+                 function(dmat) kmeans(dmat, centers = 2, nstart = 10)$cluster)
+registerSplitter("dv", "Divisive Hierarchical Clustering",
+                 function(dmat) cutree(as.hclust(diana(dmat)), k = 2))
+registerSplitter("ap", "Affinity Propagation Clustering",
+                 function(dmat) cutree(as.hclust(apcluster(-dmat^2)), k = 2))
+
+
 findSplit <- function(data,
                       metric = "euclidean",
-                      algorithm = c("hc", "km", "dv", "ap"),
+                      algorithm = names(splitters),
                       LR = c("L", "R")) {
-  dmat <- distancematrix(data, metric)
-  bin <- switch(algorithm,
-                hc = cutree(hclust(dmat, method = "ward.D2"), k = 2),
-                km = kmeans(dmat, k = 2, nstart = 10)$cluster,
-                dv = cutree(as.hclust(diana(jacc@distance)), k = 2),
-                ap = cutree(as.hclust(apcluster(-dmat^2)), k = 2))
+  dmat <- distanceMatrix(data, metric)
+  algorithm <- match.arg(algorithm)
+  FUN <- get(algorithm, envir = splitters)
+  bin <- FUN$action(dmat)
   factor(LR[bin], levels = LR)
 }
 
-if(FALSE) {
-  Modeler(learn, predict, ...)
-  learn(model, data, status, prune=keepAll)
-  FittedModel(predict, data, status, details, ...)
-  predict(object, newdata=object@trainData, ...)
-  learnLR(data, status, params, pfun)
-  predictLR(newdata, details, status, type="response", ...)
-  modelerLR <- Modeler(learnLR, predictLR)
-}
-
-if (FALSE) {
-setClass("Node",
-         slots = c(model = "FittedModel"))
-
-setClass("BinaryNode",
-         contains = "Node",
-         slots(Left = "Node",
-               Right = "Node"))
-
-setClass("LeafNode",
-         contains = "Node")
-
-
-createtree <- function(data, metric) {
-  dmat <- distancematrix(data, metric)
-  mySplit <- findSplit(dmat)
-  if (!validSplit(mySplit)) {
-    ## make a leaf node
-    val <- new("leafNode", modelerEnd)
-  } else {
-    myModel <- learn(modelerLogic, data, mySplit, keepAll)
-    leftNode <- createTree(data[, mySplit == "L"], metric)
-    rightNode <- createTree(data[, mySplit == "R"], metric)
-    val <- new("BinaryNode", myModel,
-               Left = leftNode, Right = rightNode)
-  }
-  val
-}
-}
