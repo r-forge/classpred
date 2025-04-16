@@ -37,7 +37,7 @@ learnLogic <- function(data, status, params, pfun) {
 predictLogic <- function(newdata, details, status, ...) {
   if (!all(newdata %in% c(0, 1, NA))) {
     cat("Dichotomizing\n", file = stderr())
-    newdata <- 1*(sweep(newdata, 1, coMod@details$cuts, "-") > 0)
+    newdata <- 1*(sweep(newdata, 1, details$cuts, "-") > 0)
   } 
   predict(details$model, t(newdata), ...)
 }

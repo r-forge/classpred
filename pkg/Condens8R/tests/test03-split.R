@@ -18,3 +18,6 @@ table(C.hc, splay)
 table(C.hc, C.km)
 table(C.hc, C.dv)
 table(C.hc, C.ap)
+
+evalSplit(C.hc, comat, "euclid", "sw")
+evalSplit(C.hc, comat, "euclid", "ssq")

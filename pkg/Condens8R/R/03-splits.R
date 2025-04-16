@@ -31,3 +31,38 @@ findSplit <- function(data,
   factor(LR[bin], levels = LR)
 }
 
+evalSplit <- function(split, data, metric, tool = c("sw", "ssq")) {
+  silwidth <- function(split, dmat) {
+    cat("In silwidth\n", file = stderr())
+    sw <- silhouette(as.numeric(split), dmat)
+    msw <- mean(sw[,3])
+    swad <- sapply(1:100, function(ignore) {
+      sw <- silhouette(sample(as.numeric(split)), dmat)
+      mean(sw[,3])
+    })
+    M <- sum(swad > msw)
+    list(stat = msw, pv = (M+1)/102)
+  }
+  sumsq <- function(split, dmat) {
+    cat("In sumsq\n", file = stderr())
+    D2 <- as.matrix(dmat)^2
+    foo <- data.frame(X = split)
+    G <- model.matrix(~ X - 1, data = foo)
+    SSWithin <- sum(diag(t(G) %*% D2 %*% G)/(2*apply(G, 2, sum)))
+    empire <- sapply(1:100, function(ignore) {
+      foo <- data.frame(X = sample(split))
+      G <- model.matrix(~ X - 1, data = foo)
+      SSWithin <- sum(diag(t(G) %*% D2 %*% G)/(2*apply(G, 2, sum)))
+      SSWithin
+    })
+    M <- sum(empire < SSWithin)
+    list(stat = SSWithin, pv = (M+1)/102)
+  }
+  tool <- match.arg(tool)
+  cat("Calling", tool, "\n", file = stderr())
+  dmat <- distanceMatrix(data, metric)
+  val <- switch(tool,
+                sw = silwidth(split, dmat),
+                ssq = sumsq(split, dmat))
+  val
+}

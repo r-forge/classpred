@@ -6,6 +6,8 @@
 
 import(methods)
 import(Modeler)
+importFrom("stats", "model.matrix")
+importFrom("cluster", "silhouette")
 importFrom("logicFS", "logic.bagging")
 importFrom("LogicReg", "logreg.anneal.control")
 importFrom("ClassDiscovery", "distanceMatrix")
@@ -14,4 +16,4 @@ importFrom("BimodalIndex", "bimodalIndex")
 
 export(learnConstant, predictConstant, makeLeaf)
 export(learnLogic, predictLogic, logicModeler)
-export(findSplit)
+export(findSplit, evalSplit)
