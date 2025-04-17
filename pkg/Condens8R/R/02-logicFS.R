@@ -42,7 +42,7 @@ predictLogic <- function(newdata, details, status, ...) {
   cat(class(status), "\n", file = stderr())
   pop <- predict(details$model, t(newdata), ...)
   if (all(pop %in% c(0,1)) & inherits(status, "factor")) {
-    pop <- levels(status)[1+pop]
+    pop <- factor(levels(status)[1+pop], levels = levels(status))
   }
   pop
 }

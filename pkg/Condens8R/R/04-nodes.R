@@ -16,7 +16,22 @@ setMethod("predict", "Node", function(object, ...) {
   predict(object@model, ...)
 })
 
-setMethod("predict", "BinaryNode", function(object, ...) {
+setMethod("predict", "BinaryNode", function(object, newdata, ...) {
+  if (missing(newdata)) {
+    newdata <- object@model@trainData
+  }
+  pop <- predict(object@model)
+  if (is.numeric(pop)) {
+    pop <- 1 + pop - min(pop)
+  } else {
+    pop <- as.numeric(factor(pop))
+  }
+  lpred <- predict(object@Left, newdata[, pop == 1, drop = FALSE])
+  rpred <- predict(object@Left, newdata[, pop == 2, drop = FALSE])
+  out <- rep(NA, ncol(newdata))
+  out[pop==1] <- lpred
+  out[pop == 2] <- rpred
+  out
 })
 
 createTree <- function(data, metric, label, pcut = 0.05) {

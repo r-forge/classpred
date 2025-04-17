@@ -1,5 +1,5 @@
 Package: Condens8R
-Version: 0.2.1
+Version: 0.2.2
 Date: 2025-04-17
 Title: Classes and Methods for Learning Complex Decision Tree Models
 Authors@R: person( given = c("Kevin", "R."), family = "Coombes",
