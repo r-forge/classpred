@@ -19,12 +19,20 @@ registerSplitter("dv", "Divisive Hierarchical Clustering",
 registerSplitter("ap", "Affinity Propagation Clustering",
                  function(dmat) cutree(as.hclust(apcluster(-dmat^2)), k = 2))
 
+gendist <- function(X, metric) {
+  dmat <- try(distanceMatrix(X, metric), silent = TRUE)
+  if (inherits(dmat, "try-error")) {
+    dmat <- try(binaryDistance(X, metric), silent = TRUE)
+  }
+  dmat
+}
+
 
 findSplit <- function(data,
                       metric = "euclidean",
                       algorithm = names(splitters),
                       LR = c("L", "R")) {
-  dmat <- distanceMatrix(data, metric)
+  dmat <- gendist(data, metric)
   algorithm <- match.arg(algorithm)
   FUN <- get(algorithm, envir = splitters)
   bin <- FUN$action(dmat)
@@ -60,7 +68,7 @@ evalSplit <- function(split, data, metric, tool = c("sw", "ssq")) {
   }
   tool <- match.arg(tool)
   cat("Calling", tool, "\n", file = stderr())
-  dmat <- distanceMatrix(data, metric)
+  dmat <- gendist(data, metric)
   val <- switch(tool,
                 sw = silwidth(split, dmat),
                 ssq = sumsq(split, dmat))
