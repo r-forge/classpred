@@ -12,6 +12,12 @@ setClass("BinaryNode",
 setClass("LeafNode",
          contains = "Node")
 
+setMethod("predict", "Node", function(object, ...) {
+  predict(object@model, ...)
+})
+
+setMethod("predict", "BinaryNode", function(object, ...) {
+})
 
 createTree <- function(data, metric, label, pcut = 0.05) {
   cat("Label:", label, "\n", file = stderr())

@@ -6,7 +6,8 @@ set.seed(97531)
 bimat <- matrix(rbinom(nr*nc, 1, 0.45), nrow = nr)
 dimnames(bimat) <- list(paste0("B", 1:nr),
                         paste0("S", 1:nc))
-stat <- rbinom(nc, 1, 0.37)
+LR <- c("L", "R")
+stat <- factor(LR[1 + rbinom(nc, 1, 0.37)], levels = LR)
 
 myMod <- learn(logicModeler, bimat, stat)
 table(predict(myMod), stat) # on the diagonal

@@ -38,8 +38,13 @@ predictLogic <- function(newdata, details, status, ...) {
   if (!all(newdata %in% c(0, 1, NA))) {
     cat("Dichotomizing\n", file = stderr())
     newdata <- 1*(sweep(newdata, 1, details$cuts, "-") > 0)
-  } 
-  predict(details$model, t(newdata), ...)
+  }
+  cat(class(status), "\n", file = stderr())
+  pop <- predict(details$model, t(newdata), ...)
+  if (all(pop %in% c(0,1)) & inherits(status, "factor")) {
+    pop <- levels(status)[1+pop]
+  }
+  pop
 }
 
 logicModeler <- Modeler(learnLogic, predictLogic)

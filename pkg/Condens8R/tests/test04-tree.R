@@ -10,3 +10,4 @@ for(J in 1:30) comat[J, ] <- comat[J, ] + splay
 bimat <- Condens8R:::dichotomize(comat)$data
 
 ct <- createTree(bimat, "jaccard", "H")
+table(predict(ct@model))
