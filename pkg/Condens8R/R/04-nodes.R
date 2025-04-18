@@ -1,8 +1,8 @@
 # Copyright (C) Kevin R. Coombes, 2025.
 
-
 setClass("Node",
-         slots = c(model = "FittedModel"))
+         slots = c(model = "FittedModel",
+                   name = "character"))
 
 setClass("BinaryNode",
          contains = "Node",
@@ -13,21 +13,27 @@ setClass("LeafNode",
          contains = "Node")
 
 setMethod("predict", "Node", function(object, ...) {
+  cat("Leaf Tag:", object@name, "\n", file = stderr())
   predict(object@model, ...)
 })
 
 setMethod("predict", "BinaryNode", function(object, newdata, ...) {
+  cat("Tag:", object@name, "\n", file = stderr())
   if (missing(newdata)) {
     newdata <- object@model@trainData
   }
   pop <- predict(object@model)
+  cat("Main model predictons:", table(pop),  "\n", file = stderr())
   if (is.numeric(pop)) {
     pop <- 1 + pop - min(pop)
   } else {
     pop <- as.numeric(factor(pop))
   }
+  cat("Going left\n", file = stderr())
   lpred <- predict(object@Left, newdata[, pop == 1, drop = FALSE])
-  rpred <- predict(object@Left, newdata[, pop == 2, drop = FALSE])
+  cat("Going right\n", file = stderr())
+  rpred <- predict(object@Right, newdata[, pop == 2, drop = FALSE])
+  cat("Stepping back\n", file = stderr())
   out <- rep(NA, ncol(newdata))
   out[pop==1] <- lpred
   out[pop == 2] <- rpred
@@ -62,7 +68,7 @@ createTree <- function(data, metric, label, pcut = 0.05) {
     rightNode <- createTree(data[, mySplit == "R"], metric,
                             label = paste0(label, "R"))
     cat("\nBacking out.\n\n", file = stderr())
-    barf <- new ("Node", model = myModel)
+    barf <- new ("Node", model = myModel, name = label)
     val <- new("BinaryNode", barf, 
                Left = leftNode, Right = rightNode)
   }

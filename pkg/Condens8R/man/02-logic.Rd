@@ -10,7 +10,7 @@
   mechanism to a classifier that uses the concept of logic regression.
 }
 \usage{
-learnLogic(data, status, params, pfun)
+learnLogic(data, status, params, pfun, debug = FALSE)
 predictLogic(newdata, details, status, ...)
 }
 \arguments{
@@ -29,7 +29,8 @@ predictLogic(newdata, details, status, ...)
     The function used to make predictions on new data, using the
     trained classifier.  Should always be set to
     \code{predictLogic}.
-}
+  }
+  \item{debug}{A logical value; should debug information be printer?}
   \item{newdata}{
     Another data matrix, with the same number of rows as \code{data},
     and in the same order.

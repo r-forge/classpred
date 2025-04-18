@@ -27,7 +27,6 @@ gendist <- function(X, metric) {
   dmat
 }
 
-
 findSplit <- function(data,
                       metric = "euclidean",
                       algorithm = names(splitters),

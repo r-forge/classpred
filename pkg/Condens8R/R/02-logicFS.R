@@ -17,14 +17,14 @@ dichotomize <- function(data) {
 ## samples are columns. That's the opposite of most statistical prediction
 ## models, because of how data.frames work.
 my.anneal <- logreg.anneal.control(start = 2, end = -2, iter = 10000)
-learnLogic <- function(data, status, params, pfun) {
+learnLogic <- function(data, status, params, pfun, debug = FALSE) {
   if (!all(data %in% c(0, 1, NA))) {
-    cat("Dichotomizing\n", file = stderr())
+    if (debug) cat("Dichotomizing\n", file = stderr())
     did <- dichotomize(data)
     data <- did$data
     cuts <- did$cuts
   } else {
-    cat("Already Binary\n", file = stderr())
+    if (debug) cat("Already Binary\n", file = stderr())
     cuts <- NA
   }
   arglist <- c(list(x = t(data), y = status, B = 20, nleaves = 10,
@@ -39,7 +39,7 @@ predictLogic <- function(newdata, details, status, ...) {
     cat("Dichotomizing\n", file = stderr())
     newdata <- 1*(sweep(newdata, 1, details$cuts, "-") > 0)
   }
-  cat(class(status), "\n", file = stderr())
+  cat("Statis during prediction:", class(status), "\n", file = stderr())
   pop <- predict(details$model, t(newdata), ...)
   if (all(pop %in% c(0,1)) & inherits(status, "factor")) {
     pop <- factor(levels(status)[1+pop], levels = levels(status))
