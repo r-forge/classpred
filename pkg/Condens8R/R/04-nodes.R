@@ -40,7 +40,7 @@ setMethod("predict", "BinaryNode", function(object, newdata, ...) {
   out
 })
 
-createTree <- function(data, metric, label, pcut = 0.05) {
+createTree <- function(data, metric, label, pcut = 0.05, N = 100) {
   cat("Label:", label, "\n", file = stderr())
   cat("Data size:", dim(data), "\n", file = stderr())
   if (ncol(data) < 5) {
@@ -51,9 +51,9 @@ createTree <- function(data, metric, label, pcut = 0.05) {
   dmat <- gendist(data, metric)
   mySplit <- findSplit(dmat)
   cat ("Split size:", table(mySplit), "\n", file = stderr())
-  sw <- evalSplit(mySplit, data, metric, "sw")
+  sw <- evalSplit(mySplit, data, metric, "sw", N = N)
   cat("Silhouette:", unlist(sw), "\n", file = stderr())
-  ssq <- evalSplit(mySplit, data, metric, "ssq")
+  ssq <- evalSplit(mySplit, data, metric, "ssq", N = N)
   cat("Sum of squares:", unlist(ssq), "\n", file = stderr())
   if (min(table(mySplit)) < 5 | sw$pv > pcut | ssq$pv > pcut) {
     cat("Making Leaf\n", file = stderr())

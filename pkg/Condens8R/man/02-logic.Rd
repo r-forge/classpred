@@ -11,7 +11,7 @@
 }
 \usage{
 learnLogic(data, status, params, pfun, debug = FALSE)
-predictLogic(newdata, details, status, ...)
+predictLogic(newdata, details, status, debug = FALSE, ...)
 }
 \arguments{
   \item{data}{

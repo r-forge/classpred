@@ -1,35 +1,16 @@
-\name{splitters}
-\alias{registerSplitter}
-\alias{findSplit}
-\alias{evalSplit}
+\name{createTree}
+\alias{createTree}
 
-\title{Bimodal Splitting of Data Sets}
+\title{Create a Decision tree}
 \description{
-  Functions to split a data set into two parts.
+  Functions to create a binary decision tree with a complex algorithm at
+  each nternal node.
 }
 \usage{
-registerSplitter(tag, description, FUN)
-findSplit(data, metric = "euclidean", algorithm = names(splitters),
-  LR = c("L", "R"))
-evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
+createTree(data, metric, label, pcut = 0.05, N = 100)
 }
 \arguments{
-  \item{tag}{
-    A character string representing a short abbreviation used to identify
-    and eventually call the associated "splitter" functoin that can
-    dichtomize the data.
-  }
-  \item{description}{
-    A character string containing the full name of the splitting
-    algorithm. Potentially, this can be used in data summaries or plots.
-  }
-  \item{FUN}{
-    A "splitter"; that is, a function that takes a distance matrix as
-    input and returns a numeric vector that assigns samples in the data
-    set to one of two classes labeled "1" or "2".
-  }
   \item{data}{
-    The data set to be split into two parts.
   }
   \item{metric}{
     A distance metric. This metric should be one of the values supported
@@ -37,20 +18,16 @@ evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
     \code{ClassDiscovery} package. All metrics computed by the
     \code{\link[stats]{dist}} function are supported.
   }
+  \item{label}{
+  }
+  \item{pcut}{
+  }
   \item{algorithm}{
     A tag that uniquely identifies one of the splitting functions that
     have been registered.  Built-in registered "splitters", with their
     tags, include: (hc) agglomeratve hierarchical clustering; (km)
     k-means clustering; (dv) divisive heirarchical clustering, and (ap)
     affinity propagation clustering.
-  }
-  \item{LR}{
-    A character vector of length two denoting the laels to be used for
-    the two classes after splitting the data.
-  }
-  \item{split}{
-    A clustering factor, typically the output of a call to the
-    \code{findSplit} fuction. 
   }
   \item{tool}{
     The tool/algorithm to be used to evalaute the quality of the
@@ -78,16 +55,8 @@ evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
   }
 }
 \value{
-  The \code{registerSplitter} funciton invisibly returns the tag
-  assigned to the new splitter.
+  Returns a \code{BinaryNode} object.
 
-  The \code{findSplit} function returns a two-level factor with length
-  equal to the number of columns (samples) in the data set.
-
-  The \code{evalSplit} returns a list of length two, containing a
-  \code{stat}istic (either the men silhouette width or the within-group
-  sum of square distances, depending on the tool being used) along with
-  an estimated empirical \code{pv}alue.
 }
 \author{
   Kevin R. Coombes <krc@silicovore.com>

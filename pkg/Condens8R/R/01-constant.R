@@ -1,6 +1,6 @@
 # Copyright (C) Kevin R. Coombes, 2025.
 
-## The "Modeler" asumption is that rows are features and columns are samples.
+## The "Modeler" assumption is that rows are features and columns are samples.
 learnConstant <- function(data, status, params, predfun) {
   if (is.null(params$value)) {
     if (mode(data) == "numeric") {
@@ -13,7 +13,7 @@ learnConstant <- function(data, status, params, predfun) {
               details=list(value = params$value))
 }
 
-## Repeat; samples are columns.
+## Repeat: samples are columns.
 predictConstant <- function(newdata, details, status, ...) {
   rep(details$value, ncol(newdata))
 }
@@ -21,6 +21,9 @@ predictConstant <- function(newdata, details, status, ...) {
 ## Should really check that the 'value' is a legitmate symbol
 ## in the status factor.
 makeLeaf <- function(value, status = factor(c("L", "R"))) {
+  if (!value %in% levels(status)) {
+    warning("Unrecognized level '", value, "' in status factor.\n")
+  }
   learn(Modeler(learnConstant, predictConstant, value = value),
         matrix(), status, keepAll)
 }

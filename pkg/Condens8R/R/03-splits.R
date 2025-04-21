@@ -4,7 +4,7 @@ splitters <- new.env()
 registerSplitter <- function(tag, description, FUN) {
   if (tag %in% names(splitters)) {
     warning("Replacing an existing splitter, 'tag', described as:",
-            splitters[[tag]]$description)
+            splitters[[tag]]$description, ".\n")
   }
   assign(tag, value = list(description = description, action = FUN),
          envir = splitters)
@@ -19,12 +19,14 @@ registerSplitter("dv", "Divisive Hierarchical Clustering",
 registerSplitter("ap", "Affinity Propagation Clustering",
                  function(dmat) cutree(as.hclust(apcluster(-dmat^2)), k = 2))
 
+## Auxiliary function to pool two different sets of distance metrics
+## from other packages.
 gendist <- function(X, metric) {
-  dmat <- try(distanceMatrix(X, metric), silent = TRUE)
+  dmat <- try(distanceMatrix(X, metric), silent = TRUE)   # ClassDiscovery
   if (inherits(dmat, "try-error")) {
-    dmat <- try(binaryDistance(X, metric), silent = TRUE)
+    dmat <- try(binaryDistance(X, metric), silent = TRUE) # Mercator
   }
-  dmat
+  dmat # tough luck if you passed in a metric not found in either place
 }
 
 findSplit <- function(data,
@@ -35,41 +37,42 @@ findSplit <- function(data,
   algorithm <- match.arg(algorithm)
   FUN <- get(algorithm, envir = splitters)
   bin <- FUN$action(dmat)
-  factor(LR[bin], levels = LR)
+  factor(LR[bin], levels = LR) # forces your own splitter to give only two classes
 }
 
-evalSplit <- function(split, data, metric, tool = c("sw", "ssq")) {
-  silwidth <- function(split, dmat) {
+## Add a parameter for user to specify size of empirical test?
+evalSplit <- function(split, data, metric, tool = c("sw", "ssq"), N = 100) {
+  silwidth <- function(split, dmat, N) {
     cat("In silwidth\n", file = stderr())
     sw <- silhouette(as.numeric(split), dmat)
     msw <- mean(sw[,3])
-    swad <- sapply(1:100, function(ignore) {
+    swad <- sapply(1:N, function(ignore) {
       sw <- silhouette(sample(as.numeric(split)), dmat)
       mean(sw[,3])
     })
     M <- sum(swad > msw)
-    list(stat = msw, pv = (M+1)/102)
+    list(stat = msw, pv = (M + 1)/(N + 2)) # pseudo Bayesian
   }
-  sumsq <- function(split, dmat) {
+  sumsq <- function(split, dmat, N) {
     cat("In sumsq\n", file = stderr())
     D2 <- as.matrix(dmat)^2
     foo <- data.frame(X = split)
     G <- model.matrix(~ X - 1, data = foo)
     SSWithin <- sum(diag(t(G) %*% D2 %*% G)/(2*apply(G, 2, sum)))
-    empire <- sapply(1:100, function(ignore) {
+    empire <- sapply(1:N, function(ignore) {
       foo <- data.frame(X = sample(split))
       G <- model.matrix(~ X - 1, data = foo)
       SSWithin <- sum(diag(t(G) %*% D2 %*% G)/(2*apply(G, 2, sum)))
       SSWithin
     })
     M <- sum(empire < SSWithin)
-    list(stat = SSWithin, pv = (M+1)/102)
+    list(stat = SSWithin, pv = (M + 1)/(N + 2))
   }
   tool <- match.arg(tool)
   cat("Calling", tool, "\n", file = stderr())
   dmat <- gendist(data, metric)
   val <- switch(tool,
-                sw = silwidth(split, dmat),
-                ssq = sumsq(split, dmat))
+                sw = silwidth(split, dmat, N),
+                ssq = sumsq(split, dmat, N))
   val
 }
