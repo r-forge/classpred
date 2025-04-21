@@ -61,7 +61,7 @@ createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
   }
   dmat <- gendist(data, metric)
   mySplit <- findSplit(dmat, algorithm = algorithm)
-  cluster <- mySplit
+  cluster <- as.character(mySplit)
   cat ("Split size:", table(mySplit), "\n", file = stderr())
   sw <- evalSplit(mySplit, data, metric, "sw", N = N)
   cat("Silhouette:", unlist(sw), "\n", file = stderr())
@@ -85,7 +85,8 @@ createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
                            pcut = pcut, algorithm = algorithm)
     cat("\nBacking out.\n\n", file = stderr())
     cluster[mySplit == "L"] <- leftNode@cluster
-    cluster[mySplit == "R"] <- right@cluster
+    cluster[mySplit == "R"] <- rightNode@cluster
+    cat("Clusters:", table(cluster), "\n", file = stderr())
     barf <- new ("Node", model = myModel, name = label, cluster = cluster)
     val <- new("BinaryNode", barf,
                Left = leftNode, Right = rightNode)
