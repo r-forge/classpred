@@ -7,20 +7,26 @@
   each nternal node.
 }
 \usage{
-createTree(data, metric, label, pcut = 0.05, N = 100)
+createTree(data, metric, label = "H", pcut = 0.05, N = 100, algorithm = "hc")
 }
 \arguments{
   \item{data}{
+    A data matrix where (numerical) features are rows and samples are
+    columns.
   }
   \item{metric}{
     A distance metric. This metric should be one of the values supported
-    by the \code{\link[ClassDiscovery]{distanceMatrix}} fuction from the
-    \code{ClassDiscovery} package. All metrics computed by the
-    \code{\link[stats]{dist}} function are supported.
+    by either the \code{\link[ClassDiscovery]{distanceMatrix}} function
+    from the \code{ClassDiscovery} package or the
+    \code{\link[Mercator]{binaryDistance}} function from the 
+    \code{Mercator} package. All metrics computed by the
+    \code{\link[stats]{dist}} function are included.
   }
   \item{label}{
+    Character use to mark the root note. (default is "H" for "head".)
   }
   \item{pcut}{
+    Significance cutoff ("alpha") on the empirical p-value.
   }
   \item{algorithm}{
     A tag that uniquely identifies one of the splitting functions that
@@ -28,11 +34,6 @@ createTree(data, metric, label, pcut = 0.05, N = 100)
     tags, include: (hc) agglomeratve hierarchical clustering; (km)
     k-means clustering; (dv) divisive heirarchical clustering, and (ap)
     affinity propagation clustering.
-  }
-  \item{tool}{
-    The tool/algorithm to be used to evalaute the quality of the
-    split. Built-in algorithms include the mean silhouette width (sw) or
-    the within-group sum of square distances (ssq).
   }
   \item{N}{Number of random splits used to estimate emoirical p-value.}
 }

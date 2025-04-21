@@ -2,7 +2,8 @@
 
 setClass("Node",
          slots = c(model = "FittedModel",
-                   name = "character"))
+                   name = "character",
+                   cluster = "character"))
 
 setClass("BinaryNode",
          contains = "Node",
@@ -12,9 +13,10 @@ setClass("BinaryNode",
 setClass("LeafNode",
          contains = "Node")
 
-setMethod("predict", "Node", function(object, ...) {
+setMethod("predict", "Node", function(object, newdata, ...) {
   cat("Leaf Tag:", object@name, "\n", file = stderr())
-  predict(object@model, ...)
+  cat("Size:",  dim(newdata), "\n", file = stderr())
+  predict(object@model, newdata = newdata, ...)
 })
 
 setMethod("predict", "BinaryNode", function(object, newdata, ...) {
@@ -22,17 +24,23 @@ setMethod("predict", "BinaryNode", function(object, newdata, ...) {
   if (missing(newdata)) {
     newdata <- object@model@trainData
   }
-  pop <- predict(object@model)
-  cat("Main model predictons:", table(pop),  "\n", file = stderr())
+  pop <- predict(object@model, newdata = newdata)
+  cat("Main model predictions:", table(pop),  "\n", file = stderr())
+  cat("Start pop sizes:", table(pop), "\n", file = stderr())
+  cat("Length pop:", length(pop), "\n", file = stderr())
   if (is.numeric(pop)) {
     pop <- 1 + pop - min(pop)
   } else {
     pop <- as.numeric(factor(pop))
   }
+  cat("New data s1ze:", dim(newdata), "\n", file = stderr())
+  cat("Modified pop sizes:", table(pop), "\n", file = stderr())
   cat("Going left\n", file = stderr())
-  lpred <- predict(object@Left, newdata[, pop == 1, drop = FALSE])
+  P1 <-newdata[, pop == 1, drop = FALSE]
+  lpred <- predict(object@Left, newdata = P1)
   cat("Going right\n", file = stderr())
-  rpred <- predict(object@Right, newdata[, pop == 2, drop = FALSE])
+  P2 <- newdata[, pop == 2, drop = FALSE]
+  rpred <- predict(object@Right, newdata = P2)
   cat("Stepping back\n", file = stderr())
   out <- rep(NA, ncol(newdata))
   out[pop==1] <- lpred
@@ -40,7 +48,10 @@ setMethod("predict", "BinaryNode", function(object, newdata, ...) {
   out
 })
 
-createTree <- function(data, metric, label, pcut = 0.05, N = 100) {
+## Need to fix this so it learns and remembers cluster assignments
+## as it goes.
+createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
+                       algorithm = "hc") {
   cat("Label:", label, "\n", file = stderr())
   cat("Data size:", dim(data), "\n", file = stderr())
   if (ncol(data) < 5) {
@@ -49,27 +60,34 @@ createTree <- function(data, metric, label, pcut = 0.05, N = 100) {
     return(val)
   }
   dmat <- gendist(data, metric)
-  mySplit <- findSplit(dmat)
+  mySplit <- findSplit(dmat, algorithm = algorithm)
+  cluster <- mySplit
   cat ("Split size:", table(mySplit), "\n", file = stderr())
   sw <- evalSplit(mySplit, data, metric, "sw", N = N)
   cat("Silhouette:", unlist(sw), "\n", file = stderr())
   ssq <- evalSplit(mySplit, data, metric, "ssq", N = N)
   cat("Sum of squares:", unlist(ssq), "\n", file = stderr())
   if (min(table(mySplit)) < 5 | sw$pv > pcut | ssq$pv > pcut) {
-    cat("Making Leaf\n", file = stderr())
-    val <- new("LeafNode", model = makeLeaf(paste0(label, "X")))
+    tickle <- paste0(label, "X")
+    cat("Making Leaf, '", tickle, "'\n", file = stderr())
+    val <- new("LeafNode", model = makeLeaf(tickle), name = tickle,
+               cluster = rep(tickle, ncol(data)))
   } else {
     cat("Learning model\n", file = stderr())
     myModel <- learn(logicModeler, data, mySplit, keepAll)
     cat("\nRecursing left.\n", file = stderr())
     leftNode <- createTree(data[, mySplit == "L"], metric,
-                           label = paste0(label, "L"))
+                           label = paste0(label, "L"),
+                           pcut = pcut, algorithm = algorithm)
     cat("\nRecursing right.\n", file = stderr())
     rightNode <- createTree(data[, mySplit == "R"], metric,
-                            label = paste0(label, "R"))
+                            label = paste0(label, "R"),
+                           pcut = pcut, algorithm = algorithm)
     cat("\nBacking out.\n\n", file = stderr())
-    barf <- new ("Node", model = myModel, name = label)
-    val <- new("BinaryNode", barf, 
+    cluster[mySplit == "L"] <- leftNode@cluster
+    cluster[mySplit == "R"] <- right@cluster
+    barf <- new ("Node", model = myModel, name = label, cluster = cluster)
+    val <- new("BinaryNode", barf,
                Left = leftNode, Right = rightNode)
   }
   val

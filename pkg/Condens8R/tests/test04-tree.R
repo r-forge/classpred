@@ -1,5 +1,4 @@
 library(Condens8R)
-packageVersion("Condens8R")
 nr <- 200 # features
 nc <- 60  # samples
 set.seed(80123)
@@ -11,10 +10,32 @@ for(J in 1:30) comat[J, ] <- comat[J, ] + splay
 bimat <- Condens8R:::dichotomize(comat)$data
 
 ct <- createTree(bimat, "jaccard", "H")
-table(predict(ct@model))
+table(final <- predict(ct))
+## At second step down to the left, split is 12-13, but predictions are 11-14.
+
+ct <- createTree(bimat, "jaccard", "H", pcut = 0.01, N = 1000)
+table(final <- predict(ct))
+
+ct <- createTree(bimat, "jaccard", "H", algorithm = "dv")
+table(final <- predict(ct))
+
+ct <- createTree(bimat, "jaccard", "H", algorithm = "km")
 table(final <- predict(ct))
 
 if (FALSE) {
+  X1 <- ct@Left                                     # this fails to predict
+  X2 <- X1@Left; class(X1); dim(X1@model@trainData) # this fails to predict
+  X3 <- X2@Left; class(X2); dim(X2@model@trainData) # this is okay
+  newdata = X2@model@trainData
+  pop <- predict(X2@model)
+  pop <- as.numeric(factor(pop))
+  table(pop)
+  P1 <-newdata[, pop == 1, drop = FALSE]
+  dim(P1)
+  predict(X3, newdata = P1)
+  M <- matrix(rbinom(200*17, 1, 0.35), nrow = 200)
+  predict(X3, newdata = M)
+
   ct <- createTree(bimat, "jaccard", "H", N=1000)
   library(Mercator)
   bdist <- binaryDistance(bimat, "jaccard")
