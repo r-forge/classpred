@@ -17,7 +17,7 @@ for(J in 1:30) comat[J, ] <- comat[J, ] + splay
 bimat <- Condens8R:::dichotomize(comat)$data
 
 dmat <- Mercator::binaryDistance(bimat, "jaccard")
-mySplit <- findSplit(dmat, algorithm = "hc")
+mySplit <- findSplit(dmat, splitter = "hc")
 
 left  <- makeLeaf("XYZ")
 right <- makeLeaf("UVW")

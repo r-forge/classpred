@@ -17,5 +17,5 @@ importFrom("apcluster", "apcluster")
 
 export(learnConstant, predictConstant, makeLeaf)
 export(learnLogic, predictLogic, logicModeler)
-export(findSplit, evalSplit, registerSplitter)
-export(createTree)
+export(findSplit, evalSplit, registerSplitter, availableSplitters)
+export(createTree, registerPredictor, availablePredictors)

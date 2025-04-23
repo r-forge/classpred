@@ -19,6 +19,14 @@ registerSplitter("dv", "Divisive Hierarchical Clustering",
 registerSplitter("ap", "Affinity Propagation Clustering",
                  function(dmat) cutree(as.hclust(apcluster(-dmat^2)), k = 2))
 
+availableSplitters <- function() {
+  tags <- names(splitters)
+  scrip <- sapply(tags, function(S) {
+    splitters[[S]]$description
+  })
+  data.frame(tag = tags, description = scrip)
+}
+
 ## Auxiliary function to pool two different sets of distance metrics
 ## from other packages.
 gendist <- function(X, metric) {
@@ -31,11 +39,11 @@ gendist <- function(X, metric) {
 
 findSplit <- function(data,
                       metric = "euclidean",
-                      algorithm = names(splitters),
+                      splitter = names(splitters),
                       LR = c("L", "R")) {
   dmat <- gendist(data, metric)
-  algorithm <- match.arg(algorithm)
-  FUN <- get(algorithm, envir = splitters)
+  splitter <- match.arg(splitter)
+  FUN <- get(splitter, envir = splitters)
   bin <- FUN$action(dmat)
   factor(LR[bin], levels = LR) # forces your own splitter to give only two classes
 }

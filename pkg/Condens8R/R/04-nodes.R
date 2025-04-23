@@ -1,5 +1,32 @@
 # Copyright (C) Kevin R. Coombes, 2025.
 
+predictors <- new.env()
+registerPredictor <- function(tag, description, modeler) {
+  if (tag %in% names(predictors)) {
+    warning("Replacing an existing predictor, 'tag', described as:",
+            predictors[[tag]]$description, ".\n")
+  }
+  assign(tag, value = list(description = description,
+                           modeler = modeler),
+         envir = predictors)
+  invisible(tag)
+}
+
+registerPredictor("logic", "Logic Regression", logicModeler)
+registerPredictor("svm", "Support Vector Machine", modelerSVM)
+registerPredictor("lr", "Logistic regression", modelerLR)
+registerPredictor("rf", "Random Forest", modelerRF)
+registerPredictor("tr", "Tail Rank", modelerTailRank)
+
+availablePredictors <- function() {
+  tags <- names(predictors)
+  scrip <- sapply(tags, function(S) {
+    predictors[[S]]$description
+  })
+  data.frame(tag = tags, description = scrip)
+}
+
+
 setClass("Node",
          slots = c(model = "FittedModel",
                    name = "character",
@@ -51,7 +78,7 @@ setMethod("predict", "BinaryNode", function(object, newdata, ...) {
 ## Need to fix this so it learns and remembers cluster assignments
 ## as it goes.
 createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
-                       algorithm = "hc") {
+                       splitter = "hc", modeler = "logic") {
   cat("Label:", label, "\n", file = stderr())
   cat("Data size:", dim(data), "\n", file = stderr())
   if (ncol(data) < 5) {
@@ -60,7 +87,7 @@ createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
     return(val)
   }
   dmat <- gendist(data, metric)
-  mySplit <- findSplit(dmat, algorithm = algorithm)
+  mySplit <- findSplit(dmat, splitter = splitter)
   cluster <- as.character(mySplit)
   cat ("Split size:", table(mySplit), "\n", file = stderr())
   sw <- evalSplit(mySplit, data, metric, "sw", N = N)
@@ -74,15 +101,16 @@ createTree <- function(data, metric, label = "H", pcut = 0.05, N = 100,
                cluster = rep(tickle, ncol(data)))
   } else {
     cat("Learning model\n", file = stderr())
-    myModel <- learn(logicModeler, data, mySplit, keepAll)
+    myModeler <- predictors[[modeler]]$modeler
+    myModel <- learn(myModeler, data, mySplit, keepAll)
     cat("\nRecursing left.\n", file = stderr())
     leftNode <- createTree(data[, mySplit == "L"], metric,
                            label = paste0(label, "L"),
-                           pcut = pcut, algorithm = algorithm)
+                           pcut = pcut, splitter = splitter)
     cat("\nRecursing right.\n", file = stderr())
     rightNode <- createTree(data[, mySplit == "R"], metric,
                             label = paste0(label, "R"),
-                           pcut = pcut, algorithm = algorithm)
+                           pcut = pcut, splitter = splitter)
     cat("\nBacking out.\n\n", file = stderr())
     cluster[mySplit == "L"] <- leftNode@cluster
     cluster[mySplit == "R"] <- rightNode@cluster

@@ -1,5 +1,6 @@
 \name{splitters}
 \alias{registerSplitter}
+\alias{availableSplitters}
 \alias{findSplit}
 \alias{evalSplit}
 
@@ -9,7 +10,8 @@
 }
 \usage{
 registerSplitter(tag, description, FUN)
-findSplit(data, metric = "euclidean", algorithm = names(splitters),
+availableSplitters()
+findSplit(data, metric = "euclidean", splitter = names(splitters),
   LR = c("L", "R"))
 evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
 }
@@ -37,7 +39,7 @@ evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
     \code{ClassDiscovery} package. All metrics computed by the
     \code{\link[stats]{dist}} function are supported.
   }
-  \item{algorithm}{
+  \item{splitter}{
     A tag that uniquely identifies one of the splitting functions that
     have been registered.  Built-in registered "splitters", with their
     tags, include: (hc) agglomeratve hierarchical clustering; (km)
@@ -53,8 +55,8 @@ evalSplit(split, data, metric, tool = c("sw", "ssq"), N = 100)
     \code{findSplit} fuction. 
   }
   \item{tool}{
-    The tool/algorithm to be used to evalaute the quality of the
-    split. Built-in algorithms include the mean silhouette width (sw) or
+    The tool/splitter to be used to evalaute the quality of the
+    split. Built-in splitters include the mean silhouette width (sw) or
     the within-group sum of square distances (ssq).
   }
   \item{N}{Number of random splits used to estimate emoirical p-value.}
@@ -101,7 +103,7 @@ dimnames(comat) <- list(paste0("F", 1:nr),
                         paste0("S", 1:nc))
 splay <- rep(c(2, -2), each = nc/2)
 for(J in 1:30) comat[J, ] <- comat[J, ] + splay
-C.hc <- findSplit(comat, algorithm = "hc")
+C.hc <- findSplit(comat, splitter = "hc")
 evalSplit(C.hc, comat, "euclid", "sw")
 }
 \keyword{ multivariate }
