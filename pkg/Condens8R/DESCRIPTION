@@ -1,6 +1,6 @@
 Package: Condens8R
-Version: 0.4.3
-Date: 2025-04-22
+Version: 0.5.0
+Date: 2025-04-23
 Title: Classes and Methods for Learning Complex Decision Tree Models
 Authors@R: person( given = c("Kevin", "R."), family = "Coombes",
                    role = c("aut", "cre"), email = "krc@silicovore.com")

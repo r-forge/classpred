@@ -1,0 +1,98 @@
+
+R version 4.4.3 (2025-02-28 ucrt) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(Condens8R)
+Loading required package: Modeler
+Loading required package: ClassDiscovery
+Loading required package: cluster
+Loading required package: oompaBase
+Loading required package: ClassComparison
+> new("Node")
+An object of class "Node"
+Slot "model":
+An object of class "FittedModel"
+Slot "predictFunction":
+function () 
+NULL
+<bytecode: 0x00000215cdc38858>
+
+Slot "trainData":
+<0 x 0 matrix>
+
+Slot "trainStatus":
+numeric(0)
+
+Slot "details":
+list()
+
+Slot "extras":
+list()
+
+Slot "fsVector":
+logical(0)
+
+
+Slot "name":
+character(0)
+
+Slot "cluster":
+character(0)
+
+> cons <- Modeler(learnConstant, predictConstant, value = "XYZ")
+> try(learn(cons, matrix(), LETTERS, keepAll))
+Error in validObject(.Object) : 
+  invalid class "FittedModel" object: invalid object for slot "trainStatus" in class "FittedModel": got class "character", should be or extend class "numericOrFactor"
+> fm <- learn(cons, matrix(), factor(LETTERS), keepAll)
+> predict(fm)
+[1] "XYZ"
+> predict(fm, matrix(NA, nrow=5, ncol = 10))
+ [1] "XYZ" "XYZ" "XYZ" "XYZ" "XYZ" "XYZ" "XYZ" "XYZ" "XYZ" "XYZ"
+> 
+> nr <- 200 # features
+> nc <- 60  # samples
+> set.seed(80123)
+> comat <- matrix(rnorm(nr*nc, 0, 1), nrow = nr)
+> dimnames(comat) <- list(paste0("F", 1:nr),
++                         paste0("S", 1:nc))
+> splay <- rep(c(2, -2), each = nc/2)
+> for(J in 1:30) comat[J, ] <- comat[J, ] + splay
+> bimat <- Condens8R:::dichotomize(comat)$data
+1 ..
+> 
+> dmat <- Mercator::binaryDistance(bimat, "jaccard")
+> mySplit <- findSplit(dmat, splitter = "hc")
+> 
+> left  <- makeLeaf("XYZ")
+Warning message:
+In makeLeaf("XYZ") : Unrecognized level 'XYZ' in status factor.
+
+> right <- makeLeaf("UVW")
+Warning message:
+In makeLeaf("UVW") : Unrecognized level 'UVW' in status factor.
+
+> 
+> cluster <- as.character(mySplit)
+> cluster[mySplit == "L"] <- predict(left, bimat[, mySplit == "L"])
+> cluster[mySplit == "R"] <- predict(right, bimat[, mySplit == "R"])
+> 
+> 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   2.98    0.17    3.14 

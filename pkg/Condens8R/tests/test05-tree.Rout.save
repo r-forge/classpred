@@ -1,0 +1,1016 @@
+
+R version 4.4.3 (2025-02-28 ucrt) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(Condens8R)
+Loading required package: Modeler
+Loading required package: ClassDiscovery
+Loading required package: cluster
+Loading required package: oompaBase
+Loading required package: ClassComparison
+> ## Simulate a binary matrix of features
+> nr <- 200 # features
+> nc <- 60  # samples
+> set.seed(80123)
+> comat <- matrix(rnorm(nr*nc, 0, 1), nrow = nr)
+> dimnames(comat) <- list(paste0("F", 1:nr),
++                         paste0("S", 1:nc))
+> splay <- rep(c(2, -2), each = nc/2)
+> for(J in 1:30) comat[J, ] <- comat[J, ] + splay
+> bimat <- Condens8R:::dichotomize(comat)$data
+1 ..
+> 
+> ## default analysis; hclust and logicFS
+> ct <- createTree(bimat, "jaccard", "H")
+Label: H 
+Data size: 200 60 
+Split size: 30 30 
+Calling sw 
+In silwidth
+Silhouette: 0.1742144 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 9.305651 0.009803922 
+Learning model
+
+Recursing left.
+Label: HL 
+Data size: 200 30 
+Split size: 25 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05037887 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 3.508787 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLL 
+Data size: 200 25 
+Split size: 12 13 
+Calling sw 
+In silwidth
+Silhouette: 0.02656445 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.785149 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLL 
+Data size: 200 12 
+Split size: 7 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05640472 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.120379 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLLL 
+Data size: 200 7 
+Split size: 4 3 
+Calling sw 
+In silwidth
+Silhouette: 0.07237069 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.529852 0.009803922 
+Making Leaf, ' HLLLLX '
+
+Recursing right.
+Label: HLLLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.04887427 0.08823529 
+Calling ssq 
+In sumsq
+Sum of squares: 0.2997161 0.1078431 
+Making Leaf, ' HLLLRX '
+
+Backing out.
+
+Clusters: 7 5 
+
+Recursing right.
+Label: HLLR 
+Data size: 200 13 
+Split size: 4 9 
+Calling sw 
+In silwidth
+Silhouette: 0.04660832 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.283814 0.009803922 
+Making Leaf, ' HLLRX '
+
+Backing out.
+
+Clusters: 7 5 13 
+
+Recursing right.
+Label: HLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.06696902 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.3577999 0.009803922 
+Making Leaf, ' HLRX '
+
+Backing out.
+
+Clusters: 7 5 13 5 
+
+Recursing right.
+Label: HR 
+Data size: 200 30 
+Split size: 14 16 
+Calling sw 
+In silwidth
+Silhouette: 0.02565476 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 5.224005 0.009803922 
+Learning model
+
+Recursing left.
+Label: HRL 
+Data size: 200 14 
+Split size: 12 2 
+Calling sw 
+In silwidth
+Silhouette: 0.05600537 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.997579 0.009803922 
+Making Leaf, ' HRLX '
+
+Recursing right.
+Label: HRR 
+Data size: 200 16 
+Split size: 15 1 
+Calling sw 
+In silwidth
+Silhouette: 0.09194512 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.700743 0.009803922 
+Making Leaf, ' HRRX '
+
+Backing out.
+
+Clusters: 14 16 
+
+Backing out.
+
+Clusters: 7 5 13 5 14 16 
+Warning messages:
+1: For 16 of the 58 interactions, all observations have the same value.
+These interactions are thus removed. 
+2: For 9 of the 78 interactions, all observations have the same value.
+These interactions are thus removed. 
+3: For 13 of the 53 interactions, all observations have the same value.
+These interactions are thus removed. 
+4: In makeLeaf(tickle) : Unrecognized level 'HLLLLX' in status factor.
+
+5: In makeLeaf(tickle) : Unrecognized level 'HLLLRX' in status factor.
+
+6: In makeLeaf(tickle) : Unrecognized level 'HLLRX' in status factor.
+
+7: In makeLeaf(tickle) : Unrecognized level 'HLRX' in status factor.
+
+8: For 8 of the 77 interactions, all observations have the same value.
+These interactions are thus removed. 
+9: In makeLeaf(tickle) : Unrecognized level 'HRLX' in status factor.
+
+10: In makeLeaf(tickle) : Unrecognized level 'HRRX' in status factor.
+
+> table(pred <- predict(ct))
+Tag: H 
+Main model predictions: 30 30 
+Start pop sizes: 30 30 
+Length pop: 60 
+New data s1ze: 200 60 
+Modified pop sizes: 30 30 
+Going left
+Tag: HL 
+Main model predictions: 25 5 
+Start pop sizes: 25 5 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 25 5 
+Going left
+Tag: HLL 
+Main model predictions: 11 14 
+Start pop sizes: 11 14 
+Length pop: 25 
+New data s1ze: 200 25 
+Modified pop sizes: 11 14 
+Going left
+Tag: HLLL 
+Main model predictions: 6 5 
+Start pop sizes: 6 5 
+Length pop: 11 
+New data s1ze: 200 11 
+Modified pop sizes: 6 5 
+Going left
+Leaf Tag: HLLLLX 
+Size: 200 6 
+Going right
+Leaf Tag: HLLLRX 
+Size: 200 5 
+Stepping back
+Going right
+Leaf Tag: HLLRX 
+Size: 200 14 
+Stepping back
+Going right
+Leaf Tag: HLRX 
+Size: 200 5 
+Stepping back
+Going right
+Tag: HR 
+Main model predictions: 14 16 
+Start pop sizes: 14 16 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 14 16 
+Going left
+Leaf Tag: HRLX 
+Size: 200 14 
+Going right
+Leaf Tag: HRRX 
+Size: 200 16 
+Stepping back
+Stepping back
+
+HLLLLX HLLLRX  HLLRX   HLRX   HRLX   HRRX 
+     6      5     14      5     14     16 
+> table(PRE=pred, TRU=ct@cluster)
+        TRU
+PRE      HLLLLX HLLLRX HLLRX HLRX HRLX HRRX
+  HLLLLX      6      0     0    0    0    0
+  HLLLRX      0      5     0    0    0    0
+  HLLRX       1      0    13    0    0    0
+  HLRX        0      0     0    5    0    0
+  HRLX        0      0     0    0   14    0
+  HRRX        0      0     0    0    0   16
+> ## At second step down to the left, split is 12-13, but predictions are 11-14.
+> 
+> ## change the empiricl p-value cutoffs
+> ct <- createTree(bimat, "jaccard", "H", pcut = 0.01, N = 1000)
+Label: H 
+Data size: 200 60 
+Split size: 30 30 
+Calling sw 
+In silwidth
+Silhouette: 0.1742144 0.000998004 
+Calling ssq 
+In sumsq
+Sum of squares: 9.305651 0.000998004 
+Learning model
+
+Recursing left.
+Label: HL 
+Data size: 200 30 
+Split size: 25 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05037887 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 3.508787 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLL 
+Data size: 200 25 
+Split size: 12 13 
+Calling sw 
+In silwidth
+Silhouette: 0.02656445 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.785149 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLL 
+Data size: 200 12 
+Split size: 7 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05640472 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.120379 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLLL 
+Data size: 200 7 
+Split size: 4 3 
+Calling sw 
+In silwidth
+Silhouette: 0.07237069 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.529852 0.009803922 
+Making Leaf, ' HLLLLX '
+
+Recursing right.
+Label: HLLLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.04887427 0.08823529 
+Calling ssq 
+In sumsq
+Sum of squares: 0.2997161 0.1078431 
+Making Leaf, ' HLLLRX '
+
+Backing out.
+
+Clusters: 7 5 
+
+Recursing right.
+Label: HLLR 
+Data size: 200 13 
+Split size: 4 9 
+Calling sw 
+In silwidth
+Silhouette: 0.04660832 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.283814 0.009803922 
+Making Leaf, ' HLLRX '
+
+Backing out.
+
+Clusters: 7 5 13 
+
+Recursing right.
+Label: HLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.06696902 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.3577999 0.009803922 
+Making Leaf, ' HLRX '
+
+Backing out.
+
+Clusters: 7 5 13 5 
+
+Recursing right.
+Label: HR 
+Data size: 200 30 
+Split size: 14 16 
+Calling sw 
+In silwidth
+Silhouette: 0.02565476 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 5.224005 0.009803922 
+Learning model
+
+Recursing left.
+Label: HRL 
+Data size: 200 14 
+Split size: 12 2 
+Calling sw 
+In silwidth
+Silhouette: 0.05600537 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.997579 0.009803922 
+Making Leaf, ' HRLX '
+
+Recursing right.
+Label: HRR 
+Data size: 200 16 
+Split size: 15 1 
+Calling sw 
+In silwidth
+Silhouette: 0.09194512 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.700743 0.009803922 
+Making Leaf, ' HRRX '
+
+Backing out.
+
+Clusters: 14 16 
+
+Backing out.
+
+Clusters: 7 5 13 5 14 16 
+Warning messages:
+1: For 16 of the 58 interactions, all observations have the same value.
+These interactions are thus removed. 
+2: For 9 of the 78 interactions, all observations have the same value.
+These interactions are thus removed. 
+3: For 13 of the 53 interactions, all observations have the same value.
+These interactions are thus removed. 
+4: In makeLeaf(tickle) : Unrecognized level 'HLLLLX' in status factor.
+
+5: In makeLeaf(tickle) : Unrecognized level 'HLLLRX' in status factor.
+
+6: In makeLeaf(tickle) : Unrecognized level 'HLLRX' in status factor.
+
+7: In makeLeaf(tickle) : Unrecognized level 'HLRX' in status factor.
+
+8: For 8 of the 77 interactions, all observations have the same value.
+These interactions are thus removed. 
+9: In makeLeaf(tickle) : Unrecognized level 'HRLX' in status factor.
+
+10: In makeLeaf(tickle) : Unrecognized level 'HRRX' in status factor.
+
+> table(pred <- predict(ct))
+Tag: H 
+Main model predictions: 30 30 
+Start pop sizes: 30 30 
+Length pop: 60 
+New data s1ze: 200 60 
+Modified pop sizes: 30 30 
+Going left
+Tag: HL 
+Main model predictions: 25 5 
+Start pop sizes: 25 5 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 25 5 
+Going left
+Tag: HLL 
+Main model predictions: 11 14 
+Start pop sizes: 11 14 
+Length pop: 25 
+New data s1ze: 200 25 
+Modified pop sizes: 11 14 
+Going left
+Tag: HLLL 
+Main model predictions: 6 5 
+Start pop sizes: 6 5 
+Length pop: 11 
+New data s1ze: 200 11 
+Modified pop sizes: 6 5 
+Going left
+Leaf Tag: HLLLLX 
+Size: 200 6 
+Going right
+Leaf Tag: HLLLRX 
+Size: 200 5 
+Stepping back
+Going right
+Leaf Tag: HLLRX 
+Size: 200 14 
+Stepping back
+Going right
+Leaf Tag: HLRX 
+Size: 200 5 
+Stepping back
+Going right
+Tag: HR 
+Main model predictions: 14 16 
+Start pop sizes: 14 16 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 14 16 
+Going left
+Leaf Tag: HRLX 
+Size: 200 14 
+Going right
+Leaf Tag: HRRX 
+Size: 200 16 
+Stepping back
+Stepping back
+
+HLLLLX HLLLRX  HLLRX   HLRX   HRLX   HRRX 
+     6      5     14      5     14     16 
+> table(PRE=pred, TRU=ct@cluster)
+        TRU
+PRE      HLLLLX HLLLRX HLLRX HLRX HRLX HRRX
+  HLLLLX      6      0     0    0    0    0
+  HLLLRX      0      5     0    0    0    0
+  HLLRX       1      0    13    0    0    0
+  HLRX        0      0     0    5    0    0
+  HRLX        0      0     0    0   14    0
+  HRRX        0      0     0    0    0   16
+> 
+> ## Try a different splitting routine
+> ct <- createTree(bimat, "jaccard", "H", splitter = "dv")
+Label: H 
+Data size: 200 60 
+Split size: 30 30 
+Calling sw 
+In silwidth
+Silhouette: 0.1742144 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 9.305651 0.009803922 
+Learning model
+
+Recursing left.
+Label: HL 
+Data size: 200 30 
+Split size: 25 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05037887 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 3.508787 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLL 
+Data size: 200 25 
+Split size: 19 6 
+Calling sw 
+In silwidth
+Silhouette: 0.04043513 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.773968 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLL 
+Data size: 200 19 
+Split size: 7 12 
+Calling sw 
+In silwidth
+Silhouette: 0.04154153 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.975204 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLLL 
+Data size: 200 7 
+Split size: 4 3 
+Calling sw 
+In silwidth
+Silhouette: 0.04813866 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.5645788 0.009803922 
+Making Leaf, ' HLLLLX '
+
+Recursing right.
+Label: HLLLR 
+Data size: 200 12 
+Split size: 6 6 
+Calling sw 
+In silwidth
+Silhouette: 0.04419504 0.01960784 
+Calling ssq 
+In sumsq
+Sum of squares: 1.086825 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLLRL 
+Data size: 200 6 
+Split size: 4 2 
+Calling sw 
+In silwidth
+Silhouette: 0.06461068 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.39282 0.009803922 
+Making Leaf, ' HLLLRLX '
+
+Recursing right.
+Label: HLLLRR 
+Data size: 200 6 
+Split size: 5 1 
+Calling sw 
+In silwidth
+Silhouette: 0.05375622 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.425614 0.009803922 
+Making Leaf, ' HLLLRRX '
+
+Backing out.
+
+Clusters: 6 6 
+
+Backing out.
+
+Clusters: 7 6 6 
+
+Recursing right.
+Label: HLLR 
+Data size: 200 6 
+Split size: 1 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05738226 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.4540774 0.009803922 
+Making Leaf, ' HLLRX '
+
+Backing out.
+
+Clusters: 7 6 6 6 
+
+Recursing right.
+Label: HLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.06696902 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.3577999 0.009803922 
+Making Leaf, ' HLRX '
+
+Backing out.
+
+Clusters: 7 6 6 6 5 
+
+Recursing right.
+Label: HR 
+Data size: 200 30 
+Split size: 29 1 
+Calling sw 
+In silwidth
+Silhouette: 0.1033189 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 5.285338 0.009803922 
+Making Leaf, ' HRX '
+
+Backing out.
+
+Clusters: 7 6 6 6 5 30 
+Warning messages:
+1: For 16 of the 58 interactions, all observations have the same value.
+These interactions are thus removed. 
+2: For 11 of the 65 interactions, all observations have the same value.
+These interactions are thus removed. 
+3: For 6 of the 75 interactions, all observations have the same value.
+These interactions are thus removed. 
+4: In makeLeaf(tickle) : Unrecognized level 'HLLLLX' in status factor.
+
+5: For 9 of the 55 interactions, all observations have the same value.
+These interactions are thus removed. 
+6: In makeLeaf(tickle) : Unrecognized level 'HLLLRLX' in status factor.
+
+7: In makeLeaf(tickle) : Unrecognized level 'HLLLRRX' in status factor.
+
+8: In makeLeaf(tickle) : Unrecognized level 'HLLRX' in status factor.
+
+9: In makeLeaf(tickle) : Unrecognized level 'HLRX' in status factor.
+
+10: In makeLeaf(tickle) : Unrecognized level 'HRX' in status factor.
+
+> table(pred <- predict(ct))
+Tag: H 
+Main model predictions: 30 30 
+Start pop sizes: 30 30 
+Length pop: 60 
+New data s1ze: 200 60 
+Modified pop sizes: 30 30 
+Going left
+Tag: HL 
+Main model predictions: 25 5 
+Start pop sizes: 25 5 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 25 5 
+Going left
+Tag: HLL 
+Main model predictions: 19 6 
+Start pop sizes: 19 6 
+Length pop: 25 
+New data s1ze: 200 25 
+Modified pop sizes: 19 6 
+Going left
+Tag: HLLL 
+Main model predictions: 7 12 
+Start pop sizes: 7 12 
+Length pop: 19 
+New data s1ze: 200 19 
+Modified pop sizes: 7 12 
+Going left
+Leaf Tag: HLLLLX 
+Size: 200 7 
+Going right
+Tag: HLLLR 
+Main model predictions: 6 6 
+Start pop sizes: 6 6 
+Length pop: 12 
+New data s1ze: 200 12 
+Modified pop sizes: 6 6 
+Going left
+Leaf Tag: HLLLRLX 
+Size: 200 6 
+Going right
+Leaf Tag: HLLLRRX 
+Size: 200 6 
+Stepping back
+Stepping back
+Going right
+Leaf Tag: HLLRX 
+Size: 200 6 
+Stepping back
+Going right
+Leaf Tag: HLRX 
+Size: 200 5 
+Stepping back
+Going right
+Leaf Tag: HRX 
+Size: 200 30 
+Stepping back
+
+ HLLLLX HLLLRLX HLLLRRX   HLLRX    HLRX     HRX 
+      7       6       6       6       5      30 
+> table(PRE=pred, TRU=ct@cluster)
+         TRU
+PRE       HLLLLX HLLLRLX HLLLRRX HLLRX HLRX HRX
+  HLLLLX       7       0       0     0    0   0
+  HLLLRLX      0       6       0     0    0   0
+  HLLLRRX      0       0       6     0    0   0
+  HLLRX        0       0       0     6    0   0
+  HLRX         0       0       0     0    5   0
+  HRX          0       0       0     0    0  30
+> 
+> ## Trya  differnt predictive model
+> ct <- createTree(bimat, "jaccard", "H", modeler = "svm")
+Label: H 
+Data size: 200 60 
+Split size: 30 30 
+Calling sw 
+In silwidth
+Silhouette: 0.1742144 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 9.305651 0.009803922 
+Learning model
+
+Recursing left.
+Label: HL 
+Data size: 200 30 
+Split size: 25 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05037887 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 3.508787 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLL 
+Data size: 200 25 
+Split size: 12 13 
+Calling sw 
+In silwidth
+Silhouette: 0.02656445 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.785149 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLL 
+Data size: 200 12 
+Split size: 7 5 
+Calling sw 
+In silwidth
+Silhouette: 0.05640472 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.120379 0.009803922 
+Learning model
+
+Recursing left.
+Label: HLLLL 
+Data size: 200 7 
+Split size: 4 3 
+Calling sw 
+In silwidth
+Silhouette: 0.07237069 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.529852 0.009803922 
+Making Leaf, ' HLLLLX '
+
+Recursing right.
+Label: HLLLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.04887427 0.08823529 
+Calling ssq 
+In sumsq
+Sum of squares: 0.2997161 0.1078431 
+Making Leaf, ' HLLLRX '
+
+Backing out.
+
+Clusters: 7 5 
+
+Recursing right.
+Label: HLLR 
+Data size: 200 13 
+Split size: 4 9 
+Calling sw 
+In silwidth
+Silhouette: 0.04660832 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.283814 0.009803922 
+Making Leaf, ' HLLRX '
+
+Backing out.
+
+Clusters: 7 5 13 
+
+Recursing right.
+Label: HLR 
+Data size: 200 5 
+Split size: 3 2 
+Calling sw 
+In silwidth
+Silhouette: 0.06696902 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 0.3577999 0.009803922 
+Making Leaf, ' HLRX '
+
+Backing out.
+
+Clusters: 7 5 13 5 
+
+Recursing right.
+Label: HR 
+Data size: 200 30 
+Split size: 14 16 
+Calling sw 
+In silwidth
+Silhouette: 0.02565476 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 5.224005 0.009803922 
+Learning model
+
+Recursing left.
+Label: HRL 
+Data size: 200 14 
+Split size: 12 2 
+Calling sw 
+In silwidth
+Silhouette: 0.05600537 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 1.997579 0.009803922 
+Making Leaf, ' HRLX '
+
+Recursing right.
+Label: HRR 
+Data size: 200 16 
+Split size: 15 1 
+Calling sw 
+In silwidth
+Silhouette: 0.09194512 0.009803922 
+Calling ssq 
+In sumsq
+Sum of squares: 2.700743 0.009803922 
+Making Leaf, ' HRRX '
+
+Backing out.
+
+Clusters: 14 16 
+
+Backing out.
+
+Clusters: 7 5 13 5 14 16 
+Warning messages:
+1: For 16 of the 58 interactions, all observations have the same value.
+These interactions are thus removed. 
+2: For 9 of the 78 interactions, all observations have the same value.
+These interactions are thus removed. 
+3: For 13 of the 53 interactions, all observations have the same value.
+These interactions are thus removed. 
+4: In makeLeaf(tickle) : Unrecognized level 'HLLLLX' in status factor.
+
+5: In makeLeaf(tickle) : Unrecognized level 'HLLLRX' in status factor.
+
+6: In makeLeaf(tickle) : Unrecognized level 'HLLRX' in status factor.
+
+7: In makeLeaf(tickle) : Unrecognized level 'HLRX' in status factor.
+
+8: For 8 of the 77 interactions, all observations have the same value.
+These interactions are thus removed. 
+9: In makeLeaf(tickle) : Unrecognized level 'HRLX' in status factor.
+
+10: In makeLeaf(tickle) : Unrecognized level 'HRRX' in status factor.
+
+> table(pred <- predict(ct))
+Tag: H 
+Main model predictions: 30 30 
+Start pop sizes: 30 30 
+Length pop: 60 
+New data s1ze: 200 60 
+Modified pop sizes: 30 30 
+Going left
+Tag: HL 
+Main model predictions: 25 5 
+Start pop sizes: 25 5 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 25 5 
+Going left
+Tag: HLL 
+Main model predictions: 11 14 
+Start pop sizes: 11 14 
+Length pop: 25 
+New data s1ze: 200 25 
+Modified pop sizes: 11 14 
+Going left
+Tag: HLLL 
+Main model predictions: 6 5 
+Start pop sizes: 6 5 
+Length pop: 11 
+New data s1ze: 200 11 
+Modified pop sizes: 6 5 
+Going left
+Leaf Tag: HLLLLX 
+Size: 200 6 
+Going right
+Leaf Tag: HLLLRX 
+Size: 200 5 
+Stepping back
+Going right
+Leaf Tag: HLLRX 
+Size: 200 14 
+Stepping back
+Going right
+Leaf Tag: HLRX 
+Size: 200 5 
+Stepping back
+Going right
+Tag: HR 
+Main model predictions: 14 16 
+Start pop sizes: 14 16 
+Length pop: 30 
+New data s1ze: 200 30 
+Modified pop sizes: 14 16 
+Going left
+Leaf Tag: HRLX 
+Size: 200 14 
+Going right
+Leaf Tag: HRRX 
+Size: 200 16 
+Stepping back
+Stepping back
+
+HLLLLX HLLLRX  HLLRX   HLRX   HRLX   HRRX 
+     6      5     14      5     14     16 
+> table(PRE=pred, TRU=ct@cluster)
+        TRU
+PRE      HLLLLX HLLLRX HLLRX HLRX HRLX HRRX
+  HLLLLX      6      0     0    0    0    0
+  HLLLRX      0      5     0    0    0    0
+  HLLRX       1      0    13    0    0    0
+  HLRX        0      0     0    5    0    0
+  HRLX        0      0     0    0   14    0
+  HRRX        0      0     0    0    0   16
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  18.45    0.60   18.98 

@@ -1,0 +1,74 @@
+
+R version 4.4.3 (2025-02-28 ucrt) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(Condens8R)
+Loading required package: Modeler
+Loading required package: ClassDiscovery
+Loading required package: cluster
+Loading required package: oompaBase
+Loading required package: ClassComparison
+> ##
+> nr <- 100 # features
+> nc <- 40  # samples
+> ## check binary data predictors
+> set.seed(97531)
+> bimat <- matrix(rbinom(nr*nc, 1, 0.45), nrow = nr)
+> dimnames(bimat) <- list(paste0("B", 1:nr),
++                         paste0("S", 1:nc))
+> LR <- c("L", "R")
+> stat <- factor(LR[1 + rbinom(nc, 1, 0.37)], levels = LR)
+> 
+> myMod <- learn(logicModeler, bimat, stat)
+Warning message:
+For 1 of the 123 interactions, all observations have the same value.
+These interactions are thus removed. 
+> table(predict(myMod), stat) # mostly on the diagonal
+   stat
+     L  R
+  L 25  1
+  R  0 14
+> 
+> rantest <- matrix(rbinom(nr*nc, 1, 0.45), nrow = nr)
+> dimnames(rantest) <- list(paste0("B", 1:nr),
++                           paste0("S", 1:nc))
+> table(predict(myMod, rantest))
+
+ L  R 
+35  5 
+> 
+> ## Now check continous data that get dichotomized
+> comat <- matrix(rnorm(nr*nc, 0, 1), nrow = nr)
+> dimnames(comat) <- list(paste0("B", 1:nr),
++                         paste0("S", 1:nc))
+> coMod <- learn(logicModeler, comat, stat)
+1 .
+Warning message:
+For 1 of the 107 interactions, all observations have the same value.
+These interactions are thus removed. 
+> table(predict(coMod), stat) # all on the diagonal
+   stat
+     L  R
+  L 25  0
+  R  0 15
+> table(predict(coMod, rantest))
+
+ L  R 
+31  9 
+> 
+> proc.time()
+   user  system elapsed 
+   3.04    0.32    3.37 

@@ -8,8 +8,8 @@ dimnames(comat) <- list(paste0("F", 1:nr),
                         paste0("S", 1:nc))
 splay <- rep(c(2, -2), each = nc/2)
 for(J in 1:30) comat[J, ] <- comat[J, ] + splay
-heatmap(comat, scale = "none")
 
+## Test four different splitters
 C.hc <- findSplit(comat, splitter = "hc")
 C.km <- findSplit(comat, splitter = "km")
 C.dv <- findSplit(comat, splitter = "dv")
