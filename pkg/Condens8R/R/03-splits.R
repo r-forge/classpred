@@ -17,7 +17,14 @@ registerSplitter("km", "K-Means Clustering",
 registerSplitter("dv", "Divisive Hierarchical Clustering",
                  function(dmat) cutree(as.hclust(diana(dmat)), k = 2))
 registerSplitter("ap", "Affinity Propagation Clustering",
-                 function(dmat) cutree(as.hclust(apcluster(-dmat^2)), k = 2))
+                 function(dmat) {
+                   sim2 <- -as.matrix(dmat)^2
+                   A <- apclusterK(s = sim2, K = 2)
+                   foo <- rep(NA, ncol(sim2))
+                   foo[A@clusters[[1]]] <- 1
+                   foo[A@clusters[[2]]] <- 2
+                   foo
+                 })
 
 availableSplitters <- function() {
   tags <- names(splitters)

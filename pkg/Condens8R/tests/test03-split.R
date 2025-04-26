@@ -13,7 +13,7 @@ for(J in 1:30) comat[J, ] <- comat[J, ] + splay
 C.hc <- findSplit(comat, splitter = "hc")
 C.km <- findSplit(comat, splitter = "km")
 C.dv <- findSplit(comat, splitter = "dv")
-C.ap <- findSplit(comat, splitter = "km")
+C.ap <- findSplit(comat, splitter = "ap")
 table(C.hc, splay)
 table(C.hc, C.km)
 table(C.hc, C.dv)

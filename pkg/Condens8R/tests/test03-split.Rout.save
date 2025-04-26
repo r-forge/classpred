@@ -1,5 +1,5 @@
 
-R version 4.4.3 (2025-02-28 ucrt) -- "Trophy Case"
+R version 4.5.0 (2025-04-11 ucrt) -- "How About a Twenty-Six"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64
 
@@ -35,7 +35,15 @@ Loading required package: ClassComparison
 > C.hc <- findSplit(comat, splitter = "hc")
 > C.km <- findSplit(comat, splitter = "km")
 > C.dv <- findSplit(comat, splitter = "dv")
-> C.ap <- findSplit(comat, splitter = "km")
+> C.ap <- findSplit(comat, splitter = "ap")
+Trying p = -300.3355 
+   Number of clusters: 58 
+Trying p = -421.6716 
+   Number of clusters: 7 
+Trying p = -1635.033 
+   Number of clusters: 2 
+
+Number of clusters: 2 for p = -1635.033 
 > table(C.hc, splay)
     splay
 C.hc -2  2
@@ -54,8 +62,8 @@ C.hc  L  R
 > table(C.hc, C.ap)
     C.ap
 C.hc  L  R
-   L  0 30
-   R 30  0
+   L 30  0
+   R  0 30
 > 
 > evalSplit(C.hc, comat, "euclid", "sw")
 Calling sw 
@@ -78,4 +86,4 @@ $pv
 > 
 > proc.time()
    user  system elapsed 
-   2.14    0.25    2.39 
+   2.40    0.23    2.64 
